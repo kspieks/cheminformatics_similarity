@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 
-def parse_training_command_line_arguments(command_line_args=None):
+def parse_cli_args(command_line_args=None):
     """
     Parse command-line arguments.
 
@@ -13,12 +13,12 @@ def parse_training_command_line_arguments(command_line_args=None):
     """
     parser = ArgumentParser(description='Calculates chemical similarity')
 
-    parser.add_argument('--out_file', type=str,
+    parser.add_argument('--out_file', type=str, default='similarity_matrix.pkl',
                         help='Path to save predictions. The similarity matrix will be stored as a .pkl file.')
 
-    parser.add_argument('--data_path1', type=str,
+    parser.add_argument('--data_path1', type=str, default='delaney.csv',
                         help='Path to a csv file containing SMILES.')
-    parser.add_argument('--data_path2', type=str,
+    parser.add_argument('--data_path2', type=str, default='delaney.csv',
                         help='Path to a csv file containing SMILES to be compared to.')
     
     parser.add_argument('--n_cpus', type=int, default=2,

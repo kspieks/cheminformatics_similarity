@@ -5,15 +5,16 @@ import pickle as pkl
 import pandas as pd
 from pandarallel import pandarallel
 
-from cheminformatics_similarity.parsing import parse_training_command_line_arguments
 from cheminformatics_similarity.get_similarity import get_RDKit_fp, get_similarity_matrix
+from cheminformatics_similarity.parsing import parse_cli_args
+
 
 def main():
     """
     The main executable function.
     """
 
-    args = parse_training_command_line_arguments()
+    args = parse_cli_args()
     pandarallel.initialize(nb_workers=args.n_cpus_featurize, progress_bar=True)
 
     df1 = pd.read_csv(args.data_path1)
