@@ -14,18 +14,26 @@ def parse_cli_args(command_line_args=None):
     parser = ArgumentParser(description='Calculates chemical similarity')
 
     parser.add_argument('--out_file', type=str, default='similarity_matrix.pkl',
-                        help='Path to save predictions. The similarity matrix will be stored as a .pkl file.')
+                        help='Path to save the similarity matrix as a .pkl file.')
 
     parser.add_argument('--data_path1', type=str, default='delaney.csv',
-                        help='Path to a csv file containing SMILES.')
+                        help='Path to a csv file containing smiles column.')
+
     parser.add_argument('--data_path2', type=str, default='delaney.csv',
-                        help='Path to a csv file containing SMILES to be compared to.')
+                        help='Path to a csv file containing smiles column to be compared against.')
     
     parser.add_argument('--n_cpus', type=int, default=2,
-                        help='Number of CPUs to use in parallel when calculating the similarity matrix.')
+                        help="Number of CPUs for parallel similarity matrix calculation.")
+
     parser.add_argument('--n_cpus_featurize', type=int, default=2,
-                        help='Number of CPUs to use in parallel when creating feature vectors.')
+                        help="Number of CPUs for parallel fingerprint generation.")
     
+    parser.add_argument("--metric", type=str, default="tanimoto", choices=["tanimoto", "dice"],
+                        help="Similarity metric to use (default: tanimoto).")
+    
+    parser.add_argument("--fp_type", type=str, default="count", choices=["count", "bit"],
+                        help="Fingerprint type: count or bit")
+
     args = parser.parse_args()
 
 
