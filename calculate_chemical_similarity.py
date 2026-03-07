@@ -6,7 +6,7 @@ import pickle as pkl
 import pandas as pd
 from joblib import Parallel, delayed
 
-from cheminformatics_similarity.get_similarity import (get_RDKit_fp,
+from cheminformatics_similarity.get_similarity import (get_count_RDKit_fp,
                                                        get_RDKit_fp_bit,
                                                        get_similarity_matrix)
 from cheminformatics_similarity.parsing import parse_cli_args
@@ -26,7 +26,7 @@ def get_fingerprints(smi_list: list, fp_type: str = "count", n_cpus: int = 1) ->
         - count vectors produce list of rdkit.DataStructs.UIntSparseIntVect
     """
     fp_type = fp_type.lower()
-    fp_fn = {"count": get_RDKit_fp, "bit": get_RDKit_fp_bit}
+    fp_fn = {"count": get_count_RDKit_fp, "bit": get_RDKit_fp_bit}
     if fp_type not in fp_fn:
         raise ValueError(f"Unknown fp_type '{fp_type}'. Choose from: {list(fp_fn)}")
     
