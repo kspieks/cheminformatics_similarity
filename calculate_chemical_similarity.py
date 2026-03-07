@@ -47,8 +47,10 @@ def main():
     df1 = pd.read_csv(args.data_path1)
     df2 = pd.read_csv(args.data_path2)
 
-    print("Generating fingerprints...")
+    print(f"Generating fingerprints for {args.data_path1}...")
     fp_list1 = get_fingerprints(df1.smiles.tolist(), fp_type=args.fp_type, n_cpus=args.n_cpus_featurize)
+
+    print(f"Generating fingerprints for {args.data_path2}...")
     fp_list2 = get_fingerprints(df2.smiles.tolist(), fp_type=args.fp_type, n_cpus=args.n_cpus_featurize)
 
     print(f'fp_list1 has {len(fp_list1)} smiles')
