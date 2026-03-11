@@ -4,24 +4,7 @@
 
 import numpy as np
 from joblib import Parallel, delayed
-from rdkit import Chem, DataStructs
-from rdkit.Chem import AllChem
-
-
-fp_gen = AllChem.GetRDKitFPGenerator(minPath=1, maxPath=3, fpSize=2048)
-
-def get_RDKit_fp_bit(smi: str):
-    """Generate a bit vector fingerprint for a given SMILES string."""
-    mol = Chem.MolFromSmiles(smi)
-    # rdkit.DataStructs.cDataStructs.ExplicitBitVect
-    return fp_gen.GetFingerprint(mol)
-
-
-def get_count_RDKit_fp(smi: str):
-    """Generate a count vector fingerprint for a given SMILES string."""
-    mol = Chem.MolFromSmiles(smi)
-    # rdkit.DataStructs.cDataStructs.UIntSparseIntVect
-    return fp_gen.GetCountFingerprint(mol)
+from rdkit import DataStructs
 
 
 def _bulk_tanimoto(fp, fp_list):
@@ -50,6 +33,21 @@ def _bulk_dice(fp, fp_list):
     return DataStructs.BulkDiceSimilarity(fp, fp_list)
 
 
+_METRIC_FNS = {
+    "tanimoto": _bulk_tanimoto,
+    "dice":     _bulk_dice,
+}
+
+def get_similarity_fn(metric: str = "tanimoto"):
+    """Return the bulk similarity callable for the given metric."""
+    metric = metric.lower()
+    if metric not in _METRIC_FNS:
+        raise ValueError(f"Unknown metric '{metric}'. Choose from: {list(_METRIC_FNS)}")
+
+    metric_fn = _METRIC_FNS[metric]
+    return metric_fn
+
+
 def get_similarity_matrix(
     fp_list1: list,
     fp_list2: list,
@@ -68,16 +66,10 @@ def get_similarity_matrix(
 
     Progress is measured by the number of smiles in fp_list1.
     """
-    metric = metric.lower()
-    metric_fn = {
-        "tanimoto": _bulk_tanimoto,
-        "dice": _bulk_dice,
-    }
-    if metric not in metric_fn:
-        raise ValueError(f"Unknown metric '{metric}'. Choose from: {list(metric_fn)}")
+    metric_fn = get_similarity_fn(metric=metric)
 
     results = Parallel(n_jobs=ncpus, backend="loky", batch_size="auto", verbose=5)(
-        delayed(metric_fn[metric])(fp, fp_list2)
+        delayed(metric_fn)(fp, fp_list2)
         for fp in fp_list1
     )
     similarity_matrix = np.array(results)
