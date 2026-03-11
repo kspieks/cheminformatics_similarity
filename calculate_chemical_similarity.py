@@ -4,37 +4,10 @@
 import pickle as pkl
 
 import pandas as pd
-from joblib import Parallel, delayed
 
-from cheminformatics_similarity.get_similarity import (get_count_RDKit_fp,
-                                                       get_RDKit_fp_bit,
-                                                       get_similarity_matrix)
+from cheminformatics_similarity.fingerprints import get_fingerprints
+from cheminformatics_similarity.similarity import get_similarity_matrix
 from cheminformatics_similarity.parsing import parse_cli_args
-
-
-def get_fingerprints(smi_list: list, fp_type: str = "count", n_cpus: int = 1) -> list:
-    """
-    Generate fingerprints in parallel for a list of SMILES strings.
-
-    Args:
-        smi_list: List of SMILES strings.
-        fp_type:  Fingerprint type. One of 'count' or 'bit'.
-        n_cpus:   Number of parallel workers.
-    
-    Note:
-        - bit vectors produce list of rdkit.DataStructs.cDataStructs.ExplicitBitVect
-        - count vectors produce list of rdkit.DataStructs.UIntSparseIntVect
-    """
-    fp_type = fp_type.lower()
-    fp_fn = {"count": get_count_RDKit_fp, "bit": get_RDKit_fp_bit}
-    if fp_type not in fp_fn:
-        raise ValueError(f"Unknown fp_type '{fp_type}'. Choose from: {list(fp_fn)}")
-    
-    fp_list = Parallel(n_jobs=n_cpus, backend="loky", verbose=5)(
-        delayed(fp_fn[fp_type])(smi) for smi in smi_list
-    )
-
-    return fp_list
 
 
 def main():
