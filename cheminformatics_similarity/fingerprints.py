@@ -6,7 +6,7 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 
 
-fp_gen = AllChem.GetRDKitFPGenerator(minPath=1, maxPath=3, fpSize=2048)
+fp_gen = AllChem.GetRDKitFPGenerator(minPath=1, maxPath=7, fpSize=2048)
 
 def get_RDKit_fp_bit(smi: str):
     """Generate a bit vector fingerprint for a given SMILES string."""
