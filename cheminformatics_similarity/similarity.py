@@ -105,3 +105,29 @@ def get_top_n_most_similar(similarity_matrix, n=3):
         results.append(list(zip(sorted_idx.tolist(), similarity_matrix[i, sorted_idx].tolist())))
 
     return results
+
+
+def get_top_n_least_similar(similarity_matrix, n=3):
+    """
+    For each row in the similarity matrix, return the indices and scores of
+    the n least similar molecules, sorted ascending by similarity.
+
+    Args:
+        similarity_matrix: np.ndarray of shape (n1, n2)
+        n: number of bottom hits to return per query molecule
+
+    Returns:
+        List of n1 lists, each containing (col_index, score) tuples sorted
+        ascending by similarity score.
+    """
+    n = min(n, similarity_matrix.shape[1])
+    bottom_n_idx = np.argpartition(similarity_matrix, n, axis=1)[:, :n]
+
+    results = []
+    for i, idx in enumerate(bottom_n_idx):
+        scores = similarity_matrix[i, idx]
+        sorted_order = np.argsort(scores)
+        sorted_idx = idx[sorted_order]
+        results.append(list(zip(sorted_idx.tolist(), similarity_matrix[i, sorted_idx].tolist())))
+
+    return results
