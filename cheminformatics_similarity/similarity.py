@@ -75,3 +75,33 @@ def get_similarity_matrix(
     similarity_matrix = np.array(results)
 
     return similarity_matrix
+
+
+def get_top_n_most_similar(similarity_matrix, n=3):
+    """
+    For each row in the similarity matrix, return the indices and scores of
+    the top n most similar molecules, sorted descending by similarity.
+    
+    Args:
+        similarity_matrix: np.ndarray of shape (n1, n2)
+        n: number of top hits to return per query molecule
+    
+    Returns:
+        List of n1 lists, each containing (col_index, score) tuples sorted
+        descending by similarity score. col_index refers to the position in
+        fp_list2 (i.e., the column axis of the similarity matrix)
+    """
+    n = min(n, similarity_matrix.shape[1])
+    # argpartition gets the top n indices without a full sort which is O(n2) vs O(n2 log n2)
+    # by guaranteeing only that the top n elements are in the last n slots without sorting them among themselves.
+    # then we sort only those n indices so the secondary argsort over just those n elements is cheap
+    top_n_idx = np.argpartition(similarity_matrix, -n, axis=1)[:, -n:]
+
+    results = []
+    for i, idx in enumerate(top_n_idx):
+        scores = similarity_matrix[i, idx]
+        sorted_order = np.argsort(scores)[::-1]
+        sorted_idx = idx[sorted_order]
+        results.append(list(zip(sorted_idx.tolist(), similarity_matrix[i, sorted_idx].tolist())))
+
+    return results
