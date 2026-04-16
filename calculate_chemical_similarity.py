@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
-import pickle as pkl
-
+import numpy as np
 import pandas as pd
 
 from cheminformatics_similarity.fingerprints import get_fingerprints
-from cheminformatics_similarity.similarity import get_similarity_matrix
 from cheminformatics_similarity.parsing import parse_cli_args
+from cheminformatics_similarity.similarity import get_similarity_matrix
 
 
 def main():
@@ -36,8 +35,12 @@ def main():
     )
     print(f'similarity_matrix.shape: {similarity_matrix.shape}')
 
-    with open(args.out_file, 'wb') as f:
-        pkl.dump(similarity_matrix, f)
+    # compress and save as .npz
+    # the keyword 'similarity' becomes the key used for loading
+    # to load it back later:
+    # loaded = np.load(args.out_file)
+    # similarity_matrix = loaded['similarity']
+    np.savez_compressed(args.out_file, similarity=similarity_matrix)
 
 if __name__ == '__main__':
     main()

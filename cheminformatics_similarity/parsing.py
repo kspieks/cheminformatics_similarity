@@ -13,8 +13,8 @@ def parse_cli_args(command_line_args=None):
     """
     parser = ArgumentParser(description='Calculates chemical similarity')
 
-    parser.add_argument('--out_file', type=str, default='similarity_matrix.pkl',
-                        help='Path to save the similarity matrix as a .pkl file.')
+    parser.add_argument('--out_file', type=str, default='similarity_matrix.npz',
+                        help='Path to save the similarity matrix as a .npz file.')
 
     parser.add_argument('--data_path1', type=str, default='delaney.csv',
                         help='Path to a csv file containing smiles column.')
