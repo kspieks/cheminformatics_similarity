@@ -1,7 +1,7 @@
 
-CHEM_SIM="../../cheminformatics_similarity"
+CHEM_SIM=".."
 
-out_file='ESOL_similarity.pkl'
+out_file='ESOL_similarity.npz'
 
 data_path1="data/ESOL/delaney.csv"
 data_path2="data/ESOL/delaney.csv"
