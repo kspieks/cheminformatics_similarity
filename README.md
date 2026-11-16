@@ -17,7 +17,7 @@ uv sync
 # compute a similarity matrix between two csv files
 uv run python calculate_chemical_similarity.py --data_path1 a.csv --data_path2 b.csv --out_file sim.npz
 
-# open the example notebooks
+# open the example notebooks (or `uv run jupyter notebook`)
 uv run jupyter lab
 ```
 
@@ -85,8 +85,14 @@ uv run bash example.sh
 ## Notebooks
 
 ```bash
-uv run jupyter lab
+uv run jupyter lab        # file browser, tabs, and terminals in one window
+uv run jupyter notebook   # one notebook per browser tab
 ```
+
+Both open the same `.ipynb` files and use the project environment's kernel. Start them with
+`uv run` (or after `source .venv/bin/activate`) so the command comes from `.venv`. A bare
+`jupyter notebook` outside the environment can start another Python's Jupyter, such as
+Anaconda's, which does not have rdkit.
 
 In VS Code, select `.venv/bin/python` as the notebook kernel instead.
 

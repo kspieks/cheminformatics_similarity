@@ -26,6 +26,7 @@ source = "https://github.com/kspieks/cheminformatics_similarity"
 notebooks = [
     "ipykernel>=7.4",
     "jupyterlab>=4.6",
+    "notebook>=7.6",
     "scipy>=1.18",
 ]
 # Extra packages needed only for examples/visualize_chemical_space.ipynb.
