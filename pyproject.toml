@@ -28,6 +28,14 @@ notebooks = [
     "jupyterlab>=4.6",
     "scipy>=1.18",
 ]
+# Extra packages needed only for examples/visualize_chemical_space.ipynb.
+# Install with `uv sync --group chemspace`. BMLC comes from GitHub (see [tool.uv.sources]).
+chemspace = [
+    "bmlc",
+    "descriptastorus>=2.8",
+    "scikit-learn>=1.9",
+    "umap-learn>=0.6",
+]
 
 [tool.setuptools.packages.find]
 include = ["cheminformatics_similarity*"]
@@ -36,3 +44,7 @@ include = ["cheminformatics_similarity*"]
 # Use a uv-managed Python, not one from Anaconda or the system
 python-preference = "only-managed"
 default-groups = ["notebooks"]
+
+[tool.uv.sources]
+# uv.lock pins the commit. Update with `uv lock --upgrade-package bmlc`.
+bmlc = { git = "https://github.com/kspieks/BMLC", branch = "main" }

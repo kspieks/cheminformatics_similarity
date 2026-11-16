@@ -33,6 +33,14 @@ uv sync    # creates .venv and installs the package in editable mode
 `uv sync` also installs the packages needed for the notebooks (JupyterLab, ipykernel, scipy).
 To skip them, use `uv sync --no-default-groups`.
 
+`examples/visualize_chemical_space.ipynb` needs more packages, including
+[BMLC](https://github.com/kspieks/BMLC) from GitHub. They are in the `chemspace` group,
+which is not installed by default:
+
+```bash
+uv sync --group chemspace
+```
+
 To run `python` without the `uv run` prefix, activate the environment once per terminal:
 
 ```bash
@@ -89,7 +97,7 @@ In VS Code, select `.venv/bin/python` as the notebook kernel instead.
 | `examples/MolsToGridImage.ipynb` | Drawing molecule grids with substructure highlights |
 | `examples/data/VEGFR2/VEGFR2_SALI_maxPath7_bit.ipynb` | SALI activity cliffs on VEGFR2 IC50 data |
 | `examples/data/covid_moonshot/covid_SALI_reproduce_pat_walters.ipynb` | SALI on COVID Moonshot data |
-| `examples/visualize_chemical_space.ipynb` | UMAP of chemical space; also requires [BMLC](https://github.com/kspieks/BMLC), `descriptastorus`, `scikit-learn`, and `umap-learn` |
+| `examples/visualize_chemical_space.ipynb` | UMAP, PCA, and t-SNE of chemical space; run `uv sync --group chemspace` first |
 
 ## Updating package versions
 
@@ -97,6 +105,9 @@ In VS Code, select `.venv/bin/python` as the notebook kernel instead.
 uv lock --upgrade   # newest versions allowed by pyproject.toml
 uv sync
 ```
+
+`uv.lock` pins BMLC to one commit. To pick up newer BMLC commits, run
+`uv lock --upgrade-package bmlc` and then re-commit `uv.lock`.
 
 Rerun the notebooks to check the outputs, then commit the updated `uv.lock`.
 
