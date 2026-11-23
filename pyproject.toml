@@ -25,6 +25,7 @@ source = "https://github.com/kspieks/cheminformatics_similarity"
 # Extra packages needed only to run the example notebooks
 notebooks = [
     "ipykernel>=7.4",
+    "ipywidgets>=8.1",
     "jupyterlab>=4.6",
     "notebook>=7.6",
     "scipy>=1.18",
